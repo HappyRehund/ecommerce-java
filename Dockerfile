@@ -1,5 +1,5 @@
 # openjdk 21 sebagai base image
-FROM openjdk:21-jdk-slim
+FROM amazoncorretto:21
 
 WORKDIR /app
 
