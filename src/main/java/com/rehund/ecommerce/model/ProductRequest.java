@@ -28,14 +28,14 @@ public class ProductRequest {
     @Size(max = 1000, message = "Deskripsi produk tidak boleh lebih dari 1000 karakter")
     private String description;
 
-    @NotNull(message = "stock quantity tidak boleh kosong")
-    @Positive(message = "stock quantity harus lebih besar dari 0")
+    @NotNull(message = "Stok quantity tidak boleh kosong")
+    @Min(value = 0, message = "Stok tidak boleh kurang atau sama dengan 0")
     private Integer stockQuantity;
 
-    @NotNull(message = "weight tidak boleh kosong")
-    @Positive(message = "weight harus lebih besar dari 0")
-    @Digits(integer = 10, fraction = 2, message = "weight harus memiliki maksimal 10 digit dan 2 angka dibelakang koma")
+    @NotNull(message = "Berat tidak boleh kosong")
+    @Min(value=100, message = "Berat tidak boleh kurang dari 100 gram")
     private BigDecimal weight;
 
+    @NotEmpty(message = "Harus ada satu kategori yang dipilih")
     private List<Long> categoryIds;
 }
