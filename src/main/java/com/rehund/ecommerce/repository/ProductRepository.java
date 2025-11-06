@@ -1,6 +1,8 @@
 package com.rehund.ecommerce.repository;
 
 import com.rehund.ecommerce.entity.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,7 +17,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             SELECT * FROM product
             WHERE lower("name") like :name
             """, nativeQuery = true)
-    List<Product> findByName(String name);
+    Page<Product> findByNamePageable(String name, Pageable pageable);
 
     @Query(value = """
             SELECT DISTINCT p.* FROM product p
@@ -24,4 +26,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             WHERE c.name = :categoryName
             """, nativeQuery = true)
     List<Product> findByCategory(@Param("categoryName") String categoryName);
+
+    @Query(value = """
+            SELECT * FROM product
+            """, nativeQuery = true)
+    Page<Product> findByPageable(Pageable pageable);
 }

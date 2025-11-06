@@ -5,12 +5,15 @@ import com.rehund.ecommerce.entity.Category;
 import com.rehund.ecommerce.entity.Product;
 import com.rehund.ecommerce.entity.ProductCategory;
 import com.rehund.ecommerce.model.CategoryResponse;
+import com.rehund.ecommerce.model.PaginatedProductResponse;
 import com.rehund.ecommerce.model.ProductRequest;
 import com.rehund.ecommerce.model.ProductResponse;
 import com.rehund.ecommerce.repository.CategoryRepository;
 import com.rehund.ecommerce.repository.ProductCategoryRepository;
 import com.rehund.ecommerce.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +36,29 @@ public class ProductServiceImpl implements ProductService {
                     return ProductResponse.fromProductAndCategories(product, productCategories);
                 })
                 .toList();
+    }
+
+    @Override
+    public Page<ProductResponse> findByPage(Pageable pageable) {
+
+        return productRepository.findByPageable(pageable)
+                .map(product -> {
+                    List<CategoryResponse> productCategories = getProductCategories(product.getProductId());
+                    return ProductResponse.fromProductAndCategories(product, productCategories);
+                });
+    }
+
+    @Override
+    public Page<ProductResponse> findByNameAndPageable(String name, Pageable pageable) {
+        name = "%" + name + "%";
+
+        name = name.toLowerCase();
+        
+        return productRepository.findByNamePageable(name, pageable)
+                .map(product -> {
+                    List<CategoryResponse> productCategories = getProductCategories(product.getProductId());
+                    return ProductResponse.fromProductAndCategories(product, productCategories);
+                });
     }
 
     @Override
@@ -129,6 +155,20 @@ public class ProductServiceImpl implements ProductService {
         productCategoryRepository.deleteAll(productCategories);
         productRepository.delete(existingProduct);
 
+    }
+
+    @Override
+    public PaginatedProductResponse convertProductPage(Page<ProductResponse> productPage) {
+
+        //bentuk dari page itu adalah object array dengan {content, pageable, last, totalPages, totalElements, ... (etc)
+        return PaginatedProductResponse.builder()
+                .data(productPage.getContent())
+                .pageNo(productPage.getNumber())
+                .pageSize(productPage.getSize())
+                .totalElements(productPage.getTotalElements())
+                .totalPages(productPage.getTotalPages())
+                .last(productPage.isLast())
+                .build();
     }
 
     private List<Category> getCategoriesByIds(List<Long> categoryIds){

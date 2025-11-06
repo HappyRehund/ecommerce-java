@@ -20,6 +20,7 @@ public class CategoryResponse {
     public static CategoryResponse fromCategory(Category category){
         return CategoryResponse.builder()
                 .categoryId(category.getCategoryId())
+                .name(category.getName())
                 .build();
     }
 }
