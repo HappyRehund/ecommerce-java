@@ -53,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
         name = "%" + name + "%";
 
         name = name.toLowerCase();
-        
+
         return productRepository.findByNamePageable(name, pageable)
                 .map(product -> {
                     List<CategoryResponse> productCategories = getProductCategories(product.getProductId());
