@@ -1,8 +1,6 @@
 package com.rehund.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +24,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Email
     @Column(nullable = false, unique = true)
     private String email;
 
