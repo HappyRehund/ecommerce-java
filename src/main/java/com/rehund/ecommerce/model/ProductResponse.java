@@ -29,6 +29,8 @@ public class ProductResponse {
 
     private List<CategoryResponse> categories;
 
+    // Todo: nambahin return userId
+
     public static ProductResponse fromProductAndCategories(Product product, List<CategoryResponse> categories){
         return ProductResponse.builder()
                 .productId(product.getProductId())

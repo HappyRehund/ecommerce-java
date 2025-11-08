@@ -3,6 +3,7 @@ package com.rehund.ecommerce.controller;
 import com.rehund.ecommerce.model.PaginatedProductResponse;
 import com.rehund.ecommerce.model.ProductRequest;
 import com.rehund.ecommerce.model.ProductResponse;
+import com.rehund.ecommerce.model.UserInfo;
 import com.rehund.ecommerce.service.ProductService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -66,6 +69,13 @@ public class ProductController {
 
     @PostMapping("")
     public ResponseEntity<ProductResponse> createProduct(@RequestBody @Valid  ProductRequest request){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        UserInfo userInfo = (UserInfo) authentication.getPrincipal();
+
+        request.setUser(userInfo.getUser());
+
         ProductResponse productResponse = productService.create(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)

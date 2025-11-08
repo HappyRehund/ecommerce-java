@@ -35,6 +35,9 @@ public class Product {
     @Column(name = "weight", nullable = false)
     private BigDecimal weight;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @Column(name = "stock_quantity", nullable = false)
     private Integer stockQuantity;
 
